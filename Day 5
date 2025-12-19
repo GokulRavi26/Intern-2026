@@ -1,0 +1,202 @@
+# 19/12/2025
+
+I have used Company wifi Ipv4 to connect the host
+-->To know the Ipv4 , Open cmd and type ipconfig, copy paste the Ipv4
+-->To run --> python publisher.py
+publisher.py
+import socket
+import json
+import time
+import random
+
+HOST = "192.168.150.139"
+PORT = 5005
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind((HOST, PORT))
+server.listen(1)
+
+print("TCP Server waiting for Unity...")
+
+while True:
+    conn, addr = server.accept()
+    print("Unity connected:", addr)
+
+    try:
+        while True:
+            machines = [
+                {
+                    "id": 1,
+                    "name": "Machine A",
+                    "temperature": round(random.uniform(60, 90), 2),
+                    "pressure": round(random.uniform(95, 105), 2),
+                    "status": "Running"
+                },
+                {
+                    "id": 2,
+                    "name": "Machine B",
+                    "temperature": round(random.uniform(50, 80), 2),
+                    "pressure": round(random.uniform(90, 100), 2),
+                    "status": "Idle"
+                }
+            ]
+
+            data = json.dumps(machines) + "\n"
+            conn.sendall(data.encode("utf-8"))
+            time.sleep(1)
+
+    except (BrokenPipeError, ConnectionResetError):
+        print("Unity disconnected, waiting again...")
+        conn.close()
+
+
+#TCPSubscriber in unity
+
+using System;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using TMPro;
+
+public class TCPSubscriber : MonoBehaviour
+{
+    public string host = "192.168.150.139";
+    public int port = 5005;
+    public TMP_Text outputText;
+
+    private TcpClient client;
+    private NetworkStream stream;
+    private bool isConnected;
+    private string latestOutput;
+
+    void Start()
+    {
+        latestOutput = "Click START to connect";
+    }
+
+    void Update()
+    {
+        if (outputText != null)
+            outputText.text = latestOutput;
+    }
+
+    // BUTTON CALLS THIS
+    public async void StartApp()
+    {
+        if (isConnected) return;
+
+        latestOutput = "Connecting...";
+        await ConnectToServer();
+    }
+
+    async Task ConnectToServer()
+    {
+        try
+        {
+            client = new TcpClient();
+            await client.ConnectAsync(host, port);
+            stream = client.GetStream();
+            isConnected = true;
+
+            latestOutput = "Connected to Server";
+            await ReceiveData();
+        }
+        catch (Exception e)
+        {
+            latestOutput = "Connection failed: " + e.Message;
+        }
+    }
+
+    async Task ReceiveData()
+    {
+        byte[] buffer = new byte[4096];
+
+        try
+        {
+            while (isConnected)
+            {
+                int bytes = await stream.ReadAsync(buffer, 0, buffer.Length);
+                if (bytes == 0) break;
+
+                string json = Encoding.UTF8.GetString(buffer, 0, bytes);
+                UpdateUI(json);
+            }
+        }
+        catch
+        {
+            latestOutput = "Connection lost";
+        }
+    }
+
+    void UpdateUI(string json)
+    {
+        try
+        {
+            MachineData[] machines = JsonHelper.FromJson<MachineData>(json);
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("MACHINE STATUS");
+            sb.AppendLine("----------------");
+
+            foreach (var m in machines)
+            {
+                sb.AppendLine($"ID: {m.id}");
+                sb.AppendLine($"Name: {m.name}");
+                sb.AppendLine($"Temp: {m.temperature} °C");
+                sb.AppendLine($"Pressure: {m.pressure}");
+                sb.AppendLine($"Status: {m.status}");
+                sb.AppendLine();
+            }
+
+            latestOutput = sb.ToString();
+        }
+        catch
+        {
+            latestOutput = "Invalid JSON data";
+        }
+    }
+
+    void OnDisable() => CloseConnection();
+    void OnApplicationQuit() => CloseConnection();
+
+    void CloseConnection()
+    {
+        isConnected = false;
+        stream?.Close();
+        client?.Close();
+    }
+}
+
+#Machine data
+
+[System.Serializable]
+public class MachineData
+{
+    public int id;
+    public string name;
+    public float temperature;
+    public float pressure;
+    public string status;
+}
+
+#JsonHelper
+
+using UnityEngine;
+public static class JsonHelper
+{
+    public static T[] FromJson<T>(string json)
+    {
+        string wrapped = "{ \"array\": " + json + "}";
+        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(wrapped);
+        return wrapper.array;
+    }
+
+    [System.Serializable]
+    private class Wrapper<T>
+    {
+        public T[] array;
+    }
+}
+
