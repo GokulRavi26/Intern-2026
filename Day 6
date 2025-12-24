@@ -1,0 +1,16 @@
+I learned the fundamentals of Three.js and how it is used for rendering 3D content on the web using WebGL. I understood the core concepts such as scenes, cameras, lights, meshes, and materials.
+
+I learned how to load 3D models in GLB/GLTF format using Three.js utilities. Using @react-three/fiber and @react-three/drei, I explored the useGLTF hook to import external 3D models into a React-based Three.js environment.
+
+I practiced rendering a basic 3D model inside a scene and learned the importance of position, rotation, and scale for placing models correctly in a 3D space. I also understood how Three.js uses a coordinate system (X, Y, Z axes) for model placement.
+
+Additionally, I learned why cloning models is required when the same GLB file is used multiple times in a scene, and how scene.clone(true) helps avoid rendering conflicts.
+I focused on model alignment and positioning issues commonly faced while working with imported 3D assets. I learned that many 3D models are not properly centered at the origin, which can cause floating or misaligned objects in the scene.
+
+To solve this, I implemented bounding box calculations using THREE.Box3 to determine the exact size and center of the model. Using this method, I repositioned the model so that it aligns correctly with the ground and remains fixed in the desired position.
+
+I also learned how to traverse a 3D scene to understand its structure and how multiple meshes form a single model. This helped in handling complex models such as desks and machines made up of several parts.
+
+Furthermore, I improved performance by using React hooks like useMemo and useEffect to optimize model loading and transformation. This ensured that expensive operations such as cloning and bounding box calculations are executed efficiently.
+
+By the end of the second day, I successfully placed and stabilized 3D models in a Three.js scene and gained confidence in handling real-world 3D assets for web-based applications.
