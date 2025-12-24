@@ -1,0 +1,41 @@
+Topic: Smart Factory 3D Visualization using React Three Fiber
+
+🔹 What I Learned Today
+
+  Today, I worked on building a 3D Smart Factory layout using React Three Fiber and Three.js concepts. 
+  I learned how to render and control 3D models inside a web application and how to structure a factory-like scene.
+
+🔹 Key Learnings
+
+  Understood how React Three Fiber works as a React renderer for Three.js.
+  Learned to load GLB 3D models using useGLTF from @react-three/drei.
+  Implemented a 3D floor (plane) and adjusted its position, rotation, and scale.
+  Learned how to duplicate 3D models and arrange them in rows and columns using loops.
+  Gained hands-on experience with camera positioning, OrbitControls, zoom, pan, and rotation.
+  Learned how to attach UI panels above 3D models using the Html component.
+  Understood common issues like model scaling, camera clipping, and disappearing objects and how to fix them.
+  Learned how to manage scene lighting using ambient and directional lights.
+  Improved debugging skills related to blank screen issues in 3D scenes.
+
+🔹 Outcome
+
+  By the end of the day, I was able to:
+    Display a 3D machine model on a factory floor
+    Add interactive camera controls for 360° viewing
+    Show a floating information panel above the machine displaying live data (Status, Count, OEE)
+
+🔹 Tools & Technologies Used
+
+    React.js
+    Vite
+    React Three Fiber
+    Three.js
+    @react-three/drei
+    GLB 3D Models
+
+🔹 Next Steps
+    
+    Arrange multiple machines in a full factory layout
+    Add different machine models with individual data
+    Improve visual realism with better lighting and materials
+    Integrate real-time data into machine panels

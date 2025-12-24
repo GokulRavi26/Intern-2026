@@ -1,0 +1,42 @@
+#  17/12/2025
+
+Today, I learned the basics of APIs and how different HTTP methods are used for communication between a client and a server. 
+I understood that GET is used to retrieve data from the server, POST is used to send new data, PUT is used to update existing data, and DELETE is used to remove data from the server. 
+I also learned about networking concepts such as client–server architecture, request and response flow, and how data is transferred over the network using HTTP. 
+This helped me understand how Unity applications communicate with backend services to fetch and update real-time data.
+
+🔹 1. GET Method
+Purpose: Fetch data from the server
+Used to read or retrieve information
+Does not change data on the server
+Example: Get machine status or temperature
+
+🔹 2. POST Method
+Purpose: Send new data to the server
+Used to create new records
+Data is sent in the request body
+Server stores the data
+
+🔹 3. PUT Method
+Purpose: Update existing data
+Used to modify or update existing records
+Replaces old data with new data
+
+🔹 4. DELETE Method
+Purpose: Remove data from the server
+Used to delete records
+Permanently removes data
+
+🌐 Networking Basics
+Networking is the process of exchanging data between devices over a network (LAN or Internet).
+🔹 Client–Server Architecture
+Client: Unity application
+Server: API / backend system
+
+Flow:
+1.Unity (Client) → Request → Server
+2.Server → Response → Unity
+
+🔹 Request & Response
+Request: Sent by Unity (GET/POST/PUT/DELETE)
+Response: Sent by server (JSON, status code)
