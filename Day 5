@@ -1,0 +1,262 @@
+# 19/12/2025
+
+I have used Company wifi Ipv4 to connect the host
+-->To know the Ipv4 , Open cmd and type ipconfig, copy paste the Ipv4
+-->To run --> python publisher.py
+publisher.py
+import socket
+import json
+import time
+import random
+
+HOST = "192.168.150.139"
+PORT = 5005
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind((HOST, PORT))
+server.listen(1)
+
+print("TCP Server waiting for Unity...")
+
+while True:
+    conn, addr = server.accept()
+    print("Unity connected:", addr)
+
+    try:
+        while True:
+            machines = [
+                {
+                    "id": 1,
+                    "name": "Machine A",
+                    "temperature": round(random.uniform(60, 90), 2),
+                    "pressure": round(random.uniform(95, 105), 2),
+                    "status": "Running"
+                },
+                {
+                    "id": 2,
+                    "name": "Machine B",
+                    "temperature": round(random.uniform(50, 80), 2),
+                    "pressure": round(random.uniform(90, 100), 2),
+                    "status": "Idle"
+                }
+            ]
+
+            data = json.dumps(machines) + "\n"
+            conn.sendall(data.encode("utf-8"))
+            time.sleep(1)
+
+    except (BrokenPipeError, ConnectionResetError):
+        print("Unity disconnected, waiting again...")
+        conn.close()
+
+
+#TCPSubscriber in unity
+
+using System;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using TMPro;
+
+public class TCPSubscriber : MonoBehaviour
+{
+    public string host = "192.168.150.139";
+    public int port = 5005;
+    public TMP_Text outputText;
+
+    private TcpClient client;
+    private NetworkStream stream;
+    private bool isConnected;
+    private string latestOutput;
+
+    void Start()
+    {
+        latestOutput = "Click START to connect";
+    }
+
+    void Update()
+    {
+        if (outputText != null)
+            outputText.text = latestOutput;
+    }
+
+    // BUTTON CALLS THIS
+    public async void StartApp()
+    {
+        if (isConnected) return;
+
+        latestOutput = "Connecting...";
+        await ConnectToServer();
+    }
+
+    async Task ConnectToServer()
+    {
+        try
+        {
+            client = new TcpClient();
+            await client.ConnectAsync(host, port);
+            stream = client.GetStream();
+            isConnected = true;
+
+            latestOutput = "Connected to Server";
+            await ReceiveData();
+        }
+        catch (Exception e)
+        {
+            latestOutput = "Connection failed: " + e.Message;
+        }
+    }
+
+    async Task ReceiveData()
+    {
+        byte[] buffer = new byte[4096];
+
+        try
+        {
+            while (isConnected)
+            {
+                int bytes = await stream.ReadAsync(buffer, 0, buffer.Length);
+                if (bytes == 0) break;
+
+                string json = Encoding.UTF8.GetString(buffer, 0, bytes);
+                UpdateUI(json);
+            }
+        }
+        catch
+        {
+            latestOutput = "Connection lost";
+        }
+    }
+
+    void UpdateUI(string json)
+    {
+        try
+        {
+            MachineData[] machines = JsonHelper.FromJson<MachineData>(json);
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("MACHINE STATUS");
+            sb.AppendLine("----------------");
+
+            foreach (var m in machines)
+            {
+                sb.AppendLine($"ID: {m.id}");
+                sb.AppendLine($"Name: {m.name}");
+                sb.AppendLine($"Temp: {m.temperature} °C");
+                sb.AppendLine($"Pressure: {m.pressure}");
+                sb.AppendLine($"Status: {m.status}");
+                sb.AppendLine();
+            }
+
+            latestOutput = sb.ToString();
+        }
+        catch
+        {
+            latestOutput = "Invalid JSON data";
+        }
+    }
+
+    void OnDisable() => CloseConnection();
+    void OnApplicationQuit() => CloseConnection();
+
+    void CloseConnection()
+    {
+        isConnected = false;
+        stream?.Close();
+        client?.Close();
+    }
+}
+
+#Machine data
+
+[System.Serializable]
+public class MachineData
+{
+    public int id;
+    public string name;
+    public float temperature;
+    public float pressure;
+    public string status;
+}
+
+#JsonHelper
+
+using UnityEngine;
+public static class JsonHelper
+{
+    public static T[] FromJson<T>(string json)
+    {
+        string wrapped = "{ \"array\": " + json + "}";
+        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(wrapped);
+        return wrapper.array;
+    }
+
+    [System.Serializable]
+    private class Wrapper<T>
+    {
+        public T[] array;
+    }
+}
+
+
+--------------------------------------------MEETING---------------------------------------------------------
+
+Meeting Report – Digital Twin Overview (Renault)
+
+Date: 19/12/2025
+Time: 2:00 PM – 4:00 PM
+Conducted by: Renault Company
+Mode: Technical Presentation & Demo Video
+
+Objective of the Meeting
+
+The meeting aimed to provide an overview of Digital Twin technology, its working principles, implementation methodology, use cases, cost effectiveness, accuracy, and cybersecurity considerations in an industrial environment.
+
+Summary of Discussion
+
+Introduction to Digital Twin
+Renault began with an introduction to the concept of Digital Twin, explaining how it represents a virtual replica of a physical system. They discussed the relationship between the physical layout and its corresponding virtual layout, and how real-world data is synchronized to reflect operational behavior.
+
+Working Principle & Use Cases
+The team explained how Digital Twin systems operate by continuously updating virtual models using physical data. Key use cases and applications were discussed, particularly in manufacturing, process optimization, logistics planning, and predictive analysis.
+
+Accuracy and Cost Effectiveness
+Renault highlighted that their Digital Twin solutions achieve over 85% accuracy when compared to physical factory conditions. They emphasized that the solution is cost-effective compared to traditional methods of physical testing and redesign, reducing both time and operational expenses.
+
+Demonstration Video
+A demo video was shown to demonstrate how the Digital Twin functions in an industrial environment. The video illustrated factory operations through virtual representation, although no live simulation was demonstrated during the meeting.
+
+Cybersecurity Considerations
+The discussion also covered cybersecurity aspects of Digital Twin systems, emphasizing the importance of securing industrial data, network communication, and digital assets to prevent unauthorized access or data breaches.
+
+Digital Twin Creation – Virtual Representation Process
+Renault explained the process of converting physical factory layouts into a virtual Digital Twin:
+
+Step 1: Images of the factory are captured using cameras, covering approximately 5 meters per capture. This process is performed only when the factory is shut down or in an off state to avoid interference.
+
+Step 2: The captured images are organized and aligned. At this stage, the factory representation appears fragmented and incomplete.
+
+Step 3: A specialized tool is used to convert the organized 2D images into a 3D model. As an example, they demonstrated how a car painting process is animated step-by-step in the virtual environment.
+
+Step 4: Detailed animations are applied to represent real-time operations, such as escalators lifting materials and transporting them to different locations. These movements are tracked using Bluetooth devices, placed approximately every 10 meters within the factory.
+
+Tools and Libraries
+Renault mentioned the use of proprietary 2D-to-3D conversion libraries, which are internally developed and not publicly shared. They also indicated the use of paid technical software, including tools like MicroStation and FESSO (or similar industrial software).
+
+Factory Layout Coverage
+The Digital Twin project covers the complete factory lifecycle, including:
+
+Civil layout
+
+Building layout
+
+Process layout
+
+Logistics layout
+
+Conclusion
+
+The meeting provided valuable insights into Renault’s implementation of Digital Twin technology, showcasing its practicality, scalability, accuracy, and cost benefits in industrial applications. The approach demonstrates how Digital Twins can significantly enhance factory planning, visualization, and operational efficiency while maintaining strong cybersecurity standards.
+

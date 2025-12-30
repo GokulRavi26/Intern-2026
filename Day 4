@@ -1,0 +1,77 @@
+# 18/12/2025
+
+MQTT in Unity
+MQTT is a lightweight messaging protocol used for real-time communication between devices. It is mainly designed for systems 
+with low bandwidth, low power, and unstable networks, such as IoT, AR/VR, and Unity applications.
+
+How MQTT Works:
+MQTT follows a publish–subscribe model:
+  1.Publisher: Sends (publishes) messages
+  2.Subscriber: Receives messages
+  3.Broker: Middle server that manages all messages
+MQTT Flow:
+  client<--Subscriber,publisher-->MQTT Broker-->
+
+How mqtt works in unity: 
+1.Connects Unity to an MQTT broker
+2.Subscribes to a topic
+3.Publishes a message
+4.Receives messages in JSON format
+┌─────────────────────┐
+│   Unity C# Object   │
+│  (PlayerData, etc.) │
+└─────────┬───────────┘
+          │  Convert
+          │  (JsonUtility.ToJson)
+          ▼
+┌─────────────────────┐
+│    JSON String      │
+│ {"score":100}       │
+└─────────┬───────────┘
+          │  Convert
+          │  (UTF-8 Encoding)
+          ▼
+┌─────────────────────┐
+│      Byte Array     │
+│   01101001 0101...  │
+└─────────┬───────────┘
+          │  MQTT Publish
+          ▼
+┌─────────────────────┐
+│     MQTT Broker     │
+└─────────┬───────────┘
+          │  MQTT Deliver
+          ▼
+┌─────────────────────┐
+│      Byte Array     │
+│   (Received)        │
+└─────────┬───────────┘
+          │  Convert
+          │  (UTF-8 Decoding)
+          ▼
+┌─────────────────────┐
+│    JSON String      │
+│ {"score":100}       │
+└─────────┬───────────┘
+          │  Convert
+          │  (JsonUtility.FromJson)
+          ▼
+┌─────────────────────┐
+│   Unity C# Object   │
+│  (PlayerData)       │
+└─────────────────────┘
+
+MQTT Qos
+In MQTT, Quality of Service (QoS) defines the guarantee level for message delivery between publisher and subscriber, balancing reliability
+and overhead with three levels: QoS 0 (At Most Once) for "fire and forget," 
+QoS 1 (At Least Once) for guaranteed delivery (potentially with duplicates), 
+and QoS 2 (Exactly Once) for the highest assurance, ensuring each message is received once and only once
+
+🔍 REST vs TCP (very important)
+Feature	            REST API              	TCP
+Connection        	Open → Close	        Always open
+Real-time	            ❌ No               	✅ Yes
+Latency	              High	                Very Low
+Continuous stream	     ❌	                    ✅
+Suitable for AR	       ❌	                    ✅
+
