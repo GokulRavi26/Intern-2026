@@ -1,23 +1,14 @@
+// src/pages/MachineDetailsPage.jsx
 import React from "react";
 import { useParams } from "react-router-dom";
 import MachinePreview3D from "../three/MachinePreview3D";
-
+import { useMQTTMachineData } from "../data/useMQTTMachineData";
 
 export default function MachineDetailsPage() {
-  const { id } = useParams(); // 🔥 Dynamic machine id from URL
-
-  const machineData = {
-    id: id, // ✅ dynamic
-    area: 2,
-    operatorId: "PMC2001",
-    status: "Running",
-    speed: 900,
-    productCount: 154,
-    productInQueue: 45,
-    oeeForecasted: 0,
-    oeeActual: 0,
-    trendOee: 0,
-  };
+  const { id } = useParams();
+  
+  // Get real-time MQTT data for this machine
+  const { data: machineData, isConnected } = useMQTTMachineData(id);
 
   return (
     <div
@@ -48,6 +39,21 @@ export default function MachineDetailsPage() {
         ← Back
       </button>
 
+      {/* Connection Status Banner */}
+      {!isConnected && (
+        <div style={{
+          background: "#fef3c7",
+          border: "1px solid #f59e0b",
+          color: "#92400e",
+          padding: "12px",
+          borderRadius: "6px",
+          marginBottom: "20px",
+          fontSize: "14px"
+        }}>
+          ⚠️ Waiting for real-time data connection...
+        </div>
+      )}
+
       {/* Grid Container */}
       <div
         style={{
@@ -66,12 +72,29 @@ export default function MachineDetailsPage() {
             boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
           }}
         >
-          <h2 style={{ margin: "0 0 5px 0", fontSize: "20px", fontWeight: "600" }}>
-            {machineData.id}
-          </h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+            <h2 style={{ margin: 0, fontSize: "20px", fontWeight: "600" }}>
+              {id}
+            </h2>
+            {/* Live indicator */}
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <div style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                backgroundColor: isConnected ? "#10b981" : "#ef4444",
+                animation: isConnected ? "pulse 2s infinite" : "none"
+              }} />
+              <span style={{ fontSize: "12px", color: "#666" }}>
+                {isConnected ? "Live" : "Offline"}
+              </span>
+            </div>
+          </div>
+          
           <p style={{ margin: "0 0 20px 0", fontSize: "13px", color: "#666" }}>
             Machine Details
           </p>
+
           {/* 3D Preview Section */}
           <div
             style={{
@@ -88,40 +111,69 @@ export default function MachineDetailsPage() {
             />
           </div>
 
-
-
           {/* Info */}
           <div style={{ fontSize: "14px", lineHeight: "2" }}>
-            <div><strong>Machine ID:</strong> {machineData.id}</div>
-            <div><strong>Area:</strong> {machineData.area}</div>
-            <div><strong>Operator ID:</strong> {machineData.operatorId}</div>
-            <div><strong>Status:</strong> {machineData.status}</div>
-            <div><strong>Speed:</strong> {machineData.speed}</div>
-            <div><strong>Product Count:</strong> {machineData.productCount}</div>
-            <div><strong>Product in Queue:</strong> {machineData.productInQueue}</div>
+            <div><strong>Machine ID:</strong> {id}</div>
+            <div>
+              <strong>Status:</strong>{" "}
+              <span style={{ 
+                color: machineData.status === "Running" ? "#10b981" : 
+                       machineData.status === "Idle" ? "#f59e0b" : "#ef4444",
+                fontWeight: "600"
+              }}>
+                {machineData.status}
+              </span>
+            </div>
+            <div><strong>Speed:</strong> {machineData.speed} rpm</div>
+            <div><strong>Product Count:</strong> {machineData.count}</div>
+            <div><strong>Temperature:</strong> {machineData.temperature}°C</div>
+            <div><strong>Vibration:</strong> {machineData.vibration} Hz</div>
+            <div>
+              <strong>OEE:</strong>{" "}
+              <span style={{ 
+                color: machineData.oee >= 85 ? "#10b981" : 
+                       machineData.oee >= 70 ? "#f59e0b" : "#ef4444",
+                fontWeight: "600"
+              }}>
+                {machineData.oee}%
+              </span>
+            </div>
+            {machineData.timestamp && (
+              <div style={{ marginTop: "8px", fontSize: "12px", color: "#666" }}>
+                <strong>Last Update:</strong> {new Date(machineData.timestamp).toLocaleString()}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Forecasting Card */}
         <div style={{ background: "white", borderRadius: "8px", padding: "20px" }}>
           <h3>Forecasting and predictive analysis</h3>
-          <div style={{ border: "2px dashed #e5e5e5", height: "250px" }}>
-            Chart Area
+          <div style={{ border: "2px dashed #e5e5e5", height: "250px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999" }}>
+            Chart Area - OEE: {machineData.oee}%
           </div>
         </div>
 
         {/* Alerts */}
         <div style={{ background: "white", borderRadius: "8px", padding: "20px" }}>
           <h3>Anomalies & Alerts</h3>
-          <div style={{ border: "2px dashed #fca5a5", padding: "15px" }}>
-            The OEE is expected to drop upto <strong>{machineData.oeeActual}%</strong>
+          <div style={{ 
+            border: machineData.oee < 70 ? "2px solid #fca5a5" : "2px dashed #d1fae5", 
+            padding: "15px",
+            background: machineData.oee < 70 ? "#fef2f2" : "#f0fdf4"
+          }}>
+            {machineData.oee < 70 ? (
+              <>⚠️ The OEE is expected to drop to <strong>{machineData.oee}%</strong></>
+            ) : (
+              <>✓ Machine operating within normal parameters</>
+            )}
           </div>
         </div>
 
         {/* Downtime */}
         <div style={{ background: "white", borderRadius: "8px", padding: "20px" }}>
           <h3>Downtime Forecast Chart</h3>
-          <div style={{ border: "2px dashed #e5e5e5", height: "350px" }}>
+          <div style={{ border: "2px dashed #e5e5e5", height: "350px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999" }}>
             Chart Area
           </div>
         </div>
@@ -129,7 +181,7 @@ export default function MachineDetailsPage() {
         {/* Root Cause */}
         <div style={{ background: "white", borderRadius: "8px", padding: "20px" }}>
           <h3>Root Cause Analysis</h3>
-          <div style={{ border: "2px dashed #e5e5e5", height: "390px" }}>
+          <div style={{ border: "2px dashed #e5e5e5", height: "390px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999" }}>
             Chart Area
           </div>
         </div>
@@ -137,11 +189,19 @@ export default function MachineDetailsPage() {
         {/* Trend */}
         <div style={{ background: "white", borderRadius: "8px", padding: "20px" }}>
           <h3>Trend Analysis</h3>
-          <div style={{ border: "2px dashed #e5e5e5", height: "300px" }}>
+          <div style={{ border: "2px dashed #e5e5e5", height: "300px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999" }}>
             Chart Area
           </div>
         </div>
       </div>
+
+      {/* Add CSS animation for pulse effect */}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </div>
   );
 }
