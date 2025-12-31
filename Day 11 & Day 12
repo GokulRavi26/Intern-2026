@@ -1,0 +1,224 @@
+1️. Example Project Setup
+Example repository:
+
+Repo name: smart-factory
+Main code branch: main
+Daily report branch: daily-report
+Machines used:
+Desktop-1 (Work system)
+Desktop-2 (Testing system)
+
+2️. Cloning Repository (Desktop-1)
+Example:
+You cloned the GitHub repo smart-factory into:
+Desktop-1/
+ └── smart-factory/
+
+In VS Code:
+Opened Source Control
+Clicked Clone Repository
+Selected local folder
+
+✔ Git Graph shows:
+One branch: main
+One commit: Initial commit
+
+3️. Initial Commit (Existing Project Files)
+Example files added:
+src/
+ ├── App.jsx
+ ├── FactoryScene.jsx
+ └── MachineModel.glb
+README.md
+
+What you did:
+Copied files into cloned folder
+VS Code detected changes
+Staged all files
+Commit message:
+"Initial smart factory project setup"
+Clicked Push / Sync
+
+✔ Git Graph now shows:
+One commit on main
+Label: main, origin/main
+
+4. Creating a New Branch (Daily Report)
+Example branch:
+daily-report
+
+Using Git Graph:
+Right-click on initial commit
+Select Create new branch
+Enter branch name: daily-report
+Checkout the branch
+
+✔ Git Graph shows:
+A new line branching from initial commit
+You are now on daily-report
+
+5️.  Adding Daily Report Files (Example)
+Example file added:
+reports/
+ └── day01_report.txt
+
+File content:
+Day 01:
+- Set up Git repository
+- Learned Git Graph
+
+What you did:
+Created the file
+Staged the file in Source Control
+Commit message:
+"Added Day 01 daily report"
+Clicked Push
+
+✔ Result:
+File exists only in daily-report
+main branch is unchanged
+
+6️. Git Graph View (What You See)
+o───o  daily-report
+ \
+  o     main
+
+
+Meaning:
+Same base commit
+Separate work
+Safe isolation of reports
+
+7️. Cloning Same Repo on Desktop-2
+Example:
+On Desktop-2 you cloned:
+Desktop-2/
+ └── smart-factory/
+
+✔ Git Graph shows:
+main
+daily-report
+Same commit history
+
+8️. Fetching Updates Before Editing (Desktop-2)
+Situation:
+
+Desktop-1 already pushed:
+day01_report.txt
+What you did on Desktop-2:
+Opened VS Code
+Clicked Fetch / Sync
+✔ Git Graph updated
+✔ Desktop-2 now has latest reports
+🔑 Rule: Always fetch before editing
+
+9️.  Editing & Committing from Desktop-2 (Example)
+Example new file:
+reports/
+ └── day02_report.txt
+Content:
+Day 02:
+- Learned cherry-pick
+- Learned stash
+
+Steps:
+Created the file
+Staged changes
+Commit message:
+"Added Day 02 daily report"
+Clicked Sync
+
+✔ Git Graph:
+New commit appears on daily-report
+Pushed to GitHub
+
+10.  Updating Desktop-1
+
+Before editing on Desktop-1:
+Clicked Sync / Fetch
+✔ Desktop-1 received:
+day02_report.txt
+
+✔ Both desktops are now in sync
+
+11. Cherry-Pick Example (Using Git Graph)
+Situation:
+
+daily-report has a useful file:
+best_git_practices.txt
+You want this file in main
+
+What you did:
+Open Git Graph
+Right-click commit "Added Git best practices"
+Select Cherry-pick commit
+Choose target branch: main
+
+✔ Result:
+That file appears in main
+Other report files remain excluded
+
+12.  Stash Example (UI Only)
+Situation:
+Editing day03_report.txt
+Suddenly need to switch branch
+
+What you did:
+Open Source Control
+Click More Actions (⋮)
+Select Stash Changes
+Message:
+"WIP Day 03 report"
+
+Later:
+Applied stash from Stashes panel
+
+✔ No work lost
+✔ Clean working directory
+
+13.  Merge Example Using Git Graph
+Situation:
+
+You want all reports inside main.
+
+Steps:
+Checkout main
+Open Git Graph
+Right-click daily-report
+Select Merge into current branch
+Confirm
+
+✔ Result:
+All report commits merged
+Merge commit created
+Git Graph shows joined lines
+
+14. Merge Conflict Example (Visual)
+Situation:
+Both branches edited:
+README.md
+
+VS Code shows:
+
+Conflict markers
+
+Options:
+Accept Current
+Accept Incoming
+Accept Both
+What you did:
+Selected correct content
+Saved file
+Staged file
+Committed conflict resolution
+✔ Conflict resolved successfully
+
+15.  Daily Workflow Example (No Commands)
+Every Day:
+
+Open VS Code
+Click Sync / Fetch
+Checkout correct branch
+Edit files
+Stage → Commit → Sync
+Check Git Graph
