@@ -1,0 +1,61 @@
+#05/01/2026
+Unity XR & Animation Implementation
+Overview
+
+Yesterday’s work focused on understanding and implementing XR setup, joystick-based movement, and animation control in Unity. The goal was to configure the Unity environment correctly, test input devices, and play animations from existing FBX models.
+
+1️⃣ XR Setup and Controller Integration
+
+Explored XR Interaction Toolkit and XR Origin (XR Rig) structure.
+
+Understood the difference between Hierarchy (GameObjects) and Inspector (Components).
+
+Learned that locomotion components like Continuous Move Provider (Action-based) and Continuous Turn Provider (Action-based) must be added as components to XR Origin, not as child objects.
+
+Verified joystick integration using XR Device Simulator and system gamepad detection.
+
+2️⃣ Joystick Movement & Camera Flow
+
+Studied how left joystick controls forward/backward and strafing movement.
+
+Studied how right joystick controls camera rotation (turning).
+
+Identified that correct Input Action configuration is required for joystick movement.
+
+Learned that joystick input can be handled either through:
+
+XR Interaction Toolkit (recommended for VR/XR), or
+
+Custom scripts (manual control).
+
+Understood that missing input bindings or incorrect rig setup causes camera movement issues.
+
+3️⃣ Animation Handling in Unity
+
+Learned how to import FBX models with pre-existing animations.
+
+Understood how to:
+
+Enable Import Animations
+
+Set correct Rig type (Generic/Humanoid)
+
+Created an Animator Controller and assigned it to the model.
+
+Learned how to extract and drag animation clips (e.g., Take 001) from inside the FBX into the Animator window.
+
+Set the animation as the default state so it plays automatically when the scene starts.
+
+4️⃣ Common Issues & Fixes Learned
+
+Camera not moving → incorrect XR Origin or locomotion setup.
+
+Animation not playing → Animator Controller not assigned or default state not set.
+
+Falling through ground → missing collider on the plane.
+
+Sideways camera view → incorrect XR Origin or camera rotation values.
+
+Conclusion
+
+Through this session, practical knowledge was gained in XR rig configuration, joystick-based locomotion, and animation playback in Unity. This learning improves understanding of real-time interaction, camera control, and asset animation workflows, which are essential for VR, AR, and simulation-based applications.
