@@ -1,0 +1,14 @@
+I learned how to design and implement a Virtual Factory Walkthrough using VS Code, without relying on game engines such as Unity. 
+The implementation was done using web-based 3D technologies, which helped me understand how interactive 3D environments can be developed directly in the browser.
+I learned the fundamentals of Three.js, including setting up a 3D scene, camera, renderer, lighting, and floor geometry.
+I also learned how to import and render 3D models (GLB format) created in Blender using GLTFLoader, enabling the visualization of factory environments.
+An important learning outcome was understanding ES Module imports in browsers. 
+I learned why errors like “Failed to resolve module specifier ‘three’” occur and how to resolve them by using CDN-based imports and ensuring that each JavaScript file independently imports the required libraries.
+I also implemented camera movement using a gaming joystick (8BitDo controller) through the Gamepad API.
+This included smooth forward, backward, and rotational movement, dead-zone handling, and camera direction–based navigation, which enabled a realistic factory walkthrough experience.
+In addition, I explored AI-based tools for 3D model creation and conversion, which can be used to generate or transform 3D assets into formats such as GLB/GLTF. 
+This helped me understand how AI tools can reduce manual modeling effort and speed up asset preparation for 3D applications.
+I also learned how to handle basic animations for 3D models using VS Code, including loading animation clips from GLB files and playing them programmatically within the Three.js environment.
+This gave me insight into how animations can be controlled without using a game engine.
+Furthermore, I gained practical experience in debugging web-based 3D applications, including fixing 404 resource loading issues (such as favicon errors) and properly running projects using a local development server.
+Overall, this learning session enhanced my understanding of web-based 3D visualization, VR walkthrough development, joystick-based interaction, AI-assisted 3D asset creation, and animation handling, which are highly relevant for smart factory, digital twin, and industrial visualization applications.
