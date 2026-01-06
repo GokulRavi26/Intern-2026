@@ -1,0 +1,9 @@
+I focused on understanding the integration of backend systems with real-time data communication for smart factory and visualization applications.
+I learned how to structure and test a Node.js and Python–based backend to handle machine data efficiently.
+I explored MQTT and RabbitMQ concepts for real-time message communication, including how messages are published, subscribed, and processed between multiple systems.
+I learned how to configure brokers, handle connection issues, and troubleshoot common errors related to ports, WebSocket connections, and service availability.
+I also worked on frontend–backend integration, where I learned how to send and receive live data using WebSockets and display real-time machine information in a web interface.
+This helped me understand how live industrial data can be visualized effectively in dashboards and 3D environments.
+Additionally, I practiced debugging and project management using Git, including checking commit history, resolving missing files, restoring project structure, and understanding folder status indicators in GitHub. 
+This improved my confidence in version control and collaborative development workflows.
+By the end of the session, I gained a clearer understanding of how real-time data pipelines, message brokers, backend services, and frontend visualization work together in a smart factory or digital twin system.
