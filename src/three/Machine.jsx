@@ -27,7 +27,7 @@ export default function Machine({ id, model, position, rotation, scale }) {
         if (!isConnected) {
           // Dim the machine if not connected
           child.material = child.material.clone();
-          child.material.opacity = 0.5;
+          child.material.opacity = 1;
           child.material.transparent = true;
         } else {
           // Restore normal appearance
