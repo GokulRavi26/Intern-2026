@@ -1,3 +1,4 @@
+// src/pages/FactoryPage.jsx
 import { Canvas } from "@react-three/fiber";
 import Road from "../three/Road";
 import Machine from "../three/Machine";
@@ -7,9 +8,11 @@ import Desk from "../three/Desk";
 import JoystickCamera from "../three/JoystickCamera";
 import { machinesConfig } from "../config/machineConfig";
 import { manConfig } from "../config/manConfig";
-import { OrbitControls } from "@react-three/drei";
+// import { OrbitControls } from "@react-three/drei";
 
 export default function FactoryPage() {
+  console.table(machinesConfig.map(m => m.id));
+  console.table(manConfig.map(m => m.id));
   return (
     <Canvas camera={{ position: [0, 1.6, 6], fov: 60 }}>
       <ambientLight intensity={3} />
@@ -17,7 +20,7 @@ export default function FactoryPage() {
 
       {/* 🎮 Walkthrough Camera */}
       <JoystickCamera />
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       <Ground />
       <Road />
       <Desk />
@@ -29,6 +32,7 @@ export default function FactoryPage() {
       {manConfig.map((man) => (
         <Man key={man.id} {...man} />
       ))}
+      
     </Canvas>
   );
 }

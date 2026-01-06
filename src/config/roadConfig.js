@@ -40,7 +40,7 @@ export const roadConfig = [
     repeat: [3, 1],
   },
   {
-    id: 5,
+    id: 6,
     texture: "/path1.jpeg",
     position: [-6, 0.1, -8.5],
     rotation: [-Math.PI / 2, 0, 1.55],
