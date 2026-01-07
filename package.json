@@ -23,12 +23,6 @@
       "preload.js",
       "frontend/dist/**/*"
     ],
-    "extraResources": [
-      {
-        "from": "backend/backend.exe",
-        "to": "backend.exe"
-      }
-    ],
     "win": {
       "target": "nsis"
     }
