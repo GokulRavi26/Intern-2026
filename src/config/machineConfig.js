@@ -1,7 +1,7 @@
 export const machinesConfig = [
     {
     id: "PMC-01",
-    model: "/models/machines/machine1.glb",
+    model: "./models/machines/machine1.glb",
     position: [0, 1.3, -17],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -9,7 +9,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-02",
-    model: "/models/machines/machine2.glb",
+    model: "./models/machines/machine2.glb",
     position: [4, 1.3, -17],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -17,7 +17,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-03",
-    model: "/models/machines/machine3.glb",
+    model: "./models/machines/machine3.glb",
     position: [8, 1.3, -17],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -25,7 +25,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-04",
-    model: "/models/machines/machine4.glb",
+    model: "./models/machines/machine4.glb",
     position: [12, 1.3, -17],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -33,7 +33,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-05",
-    model: "/models/machines/machine5.glb",
+    model: "./models/machines/machine5.glb",
     position: [16, 1.3, -17],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -41,7 +41,7 @@ export const machinesConfig = [
   },
   {
     id:  "PMC-06",
-    model: "/models/machines/machine6.glb",
+    model: "./models/machines/machine6.glb",
     position: [16, 1.3, -12],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -49,7 +49,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-07",
-    model: "/models/machines/machine7.glb",
+    model: "./models/machines/machine7.glb",
     position: [12, 1.3, -12],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -57,7 +57,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-08",
-    model: "/models/machines/machine8.glb",
+    model: "./models/machines/machine8.glb",
     position: [8, 1.3, -12],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -65,7 +65,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-09",
-    model: "/models/machines/machine9.glb",
+    model: "./models/machines/machine9.glb",
     position: [4, 1.3, -12],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -73,7 +73,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-10",
-    model: "/models/machines/machine10.glb",
+    model: "./models/machines/machine10.glb",
     position: [0, 1.3, -12],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -81,7 +81,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-11",
-    model: "/models/machines/machine11.glb",
+    model: "./models/machines/machine11.glb",
     position: [0, 1.3, -5],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -89,7 +89,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-12",
-    model: "/models/machines/machine12.glb",
+    model: "./models/machines/machine12.glb",
     position: [4, 1.3, -5],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -97,7 +97,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-13",
-    model: "/models/machines/machine13.glb",
+    model: "./models/machines/machine13.glb",
     position: [8, 1.3, -5],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -105,7 +105,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-14",
-    model: "/models/machines/machine14.glb",
+    model: "./models/machines/machine14.glb",
     position: [12, 1.3, -5],
     rotation: [0, 0, 0],
     scale: 0.006,
@@ -113,7 +113,7 @@ export const machinesConfig = [
   },
   {
     id: "PMC-15",
-    model: "/models/machines/machine15.glb",
+    model: "./models/machines/machine15.glb",
     position: [16, 1.3, -5],
     rotation: [0, 0, 0],
     scale: 0.006,

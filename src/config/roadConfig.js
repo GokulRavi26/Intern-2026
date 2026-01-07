@@ -1,7 +1,7 @@
 export const roadConfig = [
   {
     id: 1,
-    texture: "/floor1.jpg",
+    texture: "./images/floor1.jpg",
     position: [5, 0, -10],
     rotation: [-Math.PI / 2, 0, 0],
     size: [30, 20],
@@ -9,7 +9,7 @@ export const roadConfig = [
   },
   {
     id: 2,
-    texture: "/path1.jpeg",
+    texture: "./images/path1.jpeg",
     position: [6, 0.1, -2],
     rotation: [-Math.PI / 2, 0, 0],
     size: [25, 2],
@@ -17,7 +17,7 @@ export const roadConfig = [
   },
   {
     id: 3,
-    texture: "/path1.jpeg",
+    texture: "./images/path1.jpeg",
     position: [6, 0.1, -9],
     rotation: [-Math.PI / 2, 0, 0],
     size: [25, 2],
@@ -25,7 +25,7 @@ export const roadConfig = [
   },
   {
     id: 4,
-    texture: "/path1.jpeg",
+    texture: "./images/path1.jpeg",
     position: [6, 0.1, -15],
     rotation: [-Math.PI / 2, 0, 0],
     size: [25, 2],
@@ -33,7 +33,7 @@ export const roadConfig = [
   },
   {
     id: 5,
-    texture: "/path1.jpeg",
+    texture: "images/path1.jpeg",
     position: [18, 0.1, -8.5],
     rotation: [-Math.PI / 2, 0, 1.55],
     size: [15, 1.5],
@@ -41,7 +41,7 @@ export const roadConfig = [
   },
   {
     id: 6,
-    texture: "/path1.jpeg",
+    texture: "images/path1.jpeg",
     position: [-6, 0.1, -8.5],
     rotation: [-Math.PI / 2, 0, 1.55],
     size: [15, 1.5],
