@@ -1,0 +1,182 @@
+#06.01.2026 & 07.01.2026
+Methodology and Issues Faced During Desktop Application Implementation:
+
+1. Overview
+The objective was to convert an existing web-based Digital Twin application into a desktop application. Two desktop frameworks were evaluated:
+  1.Tauri
+  2.Electron.js
+Initially, the Tauri approach was selected, but due to multiple implementation complexities, the approach was changed to Electron.js.
+
+2. Method 1 – Tauri Implementation
+2.1 Steps Followed
+  Installed Rust and Tauri CLI.
+  Initialized Tauri inside the frontend project.
+  Configured tauri.conf.json.
+  Attempted to connect frontend with backend services.
+  Tried to bundle frontend build with backend process.
+
+2.2 Issues Faced in Tauri
+  Requires Rust toolchain knowledge.
+  Difficult to manage external backend executables.
+  Complex IPC (Inter-Process Communication).
+  Frontend path handling was restrictive.
+  Build process was time-consuming and error-prone.
+  Debugging was difficult due to Rust-level errors.
+
+2.3 Decision
+  Due to the above difficulties and time constraints, the Tauri approach was discontinued, and Electron.js was selected as a more flexible and JavaScript-friendly solution.
+
+3. Method 2 – Electron.js Implementation (Final Approach)
+3.1 Why Electron.js Was Chosen
+  Uses Node.js & JavaScript (familiar environment).
+  Easy backend process spawning.
+  Flexible file path handling.
+  Strong community support.
+  Easier debugging using Chrome DevTools.
+
+4. Step-by-Step Electron.js Implementation
+Step 1: Project Structure Setup
+digitaltwin-electron/
+│
+├── backend/
+│   └── backend.exe
+│
+├── frontend/
+│   ├── dist/                 ← Frontend production build
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+├── main.js                   ← Electron main process
+├── preload.js
+├── package.json              ← Electron config
+└── dist/                     ← Electron build output
+
+Step 2: Frontend Build
+  Built frontend using:
+  npm run build
+
+Ensured all assets are generated inside:
+frontend/dist/
+
+Step 3: Frontend Code Changes for Electron Compatibility
+Problem
+  Frontend worked in browser but failed after Electron build.
+  Root Cause
+  Absolute paths like /assets/...
+  BrowserRouter causing routing errors
+  Incorrect file references
+  Fixes Applied
+
+✅ Use relative paths
+"./assets/model.glb"
+
+✅ Use HashRouter
+  import { HashRouter } from "react-router-dom";
+
+✅ Avoid absolute URLs
+  file:///D:/... ❌
+  ./models/model.glb ✅
+
+Step 4: Electron Main Process (main.js)
+const { app, BrowserWindow } = require("electron");
+const path = require("path");
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  const frontendPath = app.isPackaged
+    ? path.join(process.resourcesPath, "app.asar", "frontend", "dist", "index.html")
+    : path.join(__dirname, "frontend", "dist", "index.html");
+
+  win.loadFile(frontendPath);
+}
+
+app.whenReady().then(createWindow);
+
+Step 5: Packaging Configuration (package.json)
+{
+  "name": "digitaltwin-electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "frontend/dist/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/backend.exe",
+        "to": "backend.exe"
+      }
+    ]
+  }
+}
+
+5. Issues Faced in Electron.js
+Issue 1: Frontend Not Loading After Build
+
+ERR_FILE_NOT_FOUND
+
+Blank screen after installation
+
+✔ Reason
+Incorrect file paths inside app.asar.
+
+✔ Solution
+  Used app.isPackaged
+  Used process.resourcesPath
+  Verified paths using existsSync()
+  Issue 2: Routing Error
+✔ Reason
+    BrowserRouter does not work with file:// protocol.
+✔ Solution
+  Switched to HashRouter.
+  Issue 3: Backend Executable Not Found
+  ✔ Reason
+  Electron expects backend inside resources/.
+  ✔ Solution
+      Used extraResources
+      Loaded backend using process.resourcesPath.
+6. .gitignore Configuration
+Frontend .gitignore
+node_modules/
+dist/
+.env
+
+Backend .gitignore
+__pycache__/
+.venv/
+build/
+dist/
+*.exe
+
+Electron .gitignore
+node_modules/
+dist/
+*.log
+
+7. Final Outcome
+    Successfully created a desktop application using Electron.js.
+    Frontend loads correctly in both:
+    Development
+    Installed build
+Learned how to handle:
+    File paths
+    Build packaging
+    Desktop routing
+    Gained practical experience in desktop deployment challenges.
+
+8. Conclusion:
+Although Tauri provides a lightweight solution, Electron.js proved to be more suitable for this project due to ease of implementation, 
+flexibility, and better backend integration. The challenges faced during frontend build loading provided valuable insight into real-world production issues.
