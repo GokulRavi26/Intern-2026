@@ -1,5 +1,5 @@
 // // src/App.jsx
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import { HashRouter, Routes, Route, BrowserRouter } from "react-router-dom";
 // import { useEffect } from "react";
 // import FactoryPage from "./pages/FactoryPage";
 // import MachineDetailsPage from "./pages/MachineDetailsPage";
@@ -7,19 +7,15 @@
 
 // export default function App() {
 //   useEffect(() => {
-//     // Initialize RabbitMQ connection when app starts
-//     // RabbitMQ Web STOMP plugin URL (default port 15674)
-//     const brokerUrl = "http://localhost:15674/stomp";
-//     // For secure connection use: "https://your-broker.com:15674/stomp"
-    
+//     const brokerUrl = "http://192.168.150.139:15674/stomp";
+
 //     const options = {
-//       username: "guest", // RabbitMQ username
-//       password: "guest", // RabbitMQ password
+//       username: "factory",
+//       password: "factory",
 //     };
 
 //     rabbitmqService.connect(brokerUrl, options);
 
-//     // Cleanup on unmount
 //     return () => {
 //       rabbitmqService.disconnect();
 //     };
@@ -28,23 +24,6 @@
 //   return (
 //     <BrowserRouter>
 //       <div style={{ width: "100vw", height: "100vh" }}>
-//         {/* Top Plant Selector (commented out) */}
-//         {/* <select
-//           style={{
-//             position: "absolute",
-//             top: 10,
-//             left: 10,
-//             zIndex: 10,
-//             padding: "6px"
-//           }}
-//         >
-//           <option>Plant</option>
-//           <option>EOL MOLDING</option>
-//           <option>EOL-FINAL_TEST</option>
-//           <option>AMTDC</option>
-//         </select> */}
-
-//         {/* Routes */}
 //         <Routes>
 //           <Route path="/" element={<FactoryPage />} />
 //           <Route path="/machine/:id" element={<MachineDetailsPage />} />
@@ -55,36 +34,99 @@
 // }
 
 // src/App.jsx
-import { HashRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+// src/App.jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import FactoryPage from "./pages/FactoryPage";
 import MachineDetailsPage from "./pages/MachineDetailsPage";
+import ConnectionLogin from "./components/ConnectionLogin";
 import rabbitmqService from "./services/rabbitmqServices";
 
 export default function App() {
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectionConfig, setConnectionConfig] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  /* ================= RESTORE SESSION ON REFRESH ================= */
   useEffect(() => {
-    const brokerUrl = "http://localhost:15674/stomp";
+    const host = localStorage.getItem("rabbitmq_host");
+    const port = localStorage.getItem("rabbitmq_port");
+    const username = localStorage.getItem("rabbitmq_username");
 
-    const options = {
-      username: "guest",
-      password: "guest",
-    };
+    if (host && port && username) {
+      setConnectionConfig({ host, port, username });
+      setIsConnected(true); // ✅ KEY LINE
+    }
 
-    rabbitmqService.connect(brokerUrl, options);
-
-    return () => {
-      rabbitmqService.disconnect();
-    };
+    setIsLoading(false);
   }, []);
 
-  return (
-    <HashRouter>
-      <div style={{ width: "100vw", height: "100vh" }}>
-        <Routes>
-          <Route path="/" element={<FactoryPage />} />
-          <Route path="/machine/:id" element={<MachineDetailsPage />} />
-        </Routes>
+  /* ================= CONNECT HANDLER ================= */
+  const handleConnect = async (credentials) => {
+    try {
+      await rabbitmqService.connect({
+        host: credentials.host,
+        port: Number(credentials.port),
+        username: credentials.username,
+        password: credentials.password,
+      });
+
+      // Save session (NO PASSWORD)
+      localStorage.setItem("rabbitmq_host", credentials.host);
+      localStorage.setItem("rabbitmq_port", credentials.port);
+      localStorage.setItem("rabbitmq_username", credentials.username);
+
+      setConnectionConfig({
+        host: credentials.host,
+        port: credentials.port,
+        username: credentials.username,
+      });
+
+      setIsConnected(true);
+    } catch (err) {
+      console.error("Connection failed:", err);
+      throw new Error(
+        "Failed to connect to RabbitMQ. Please check your credentials."
+      );
+    }
+  };
+
+  /* ================= LOADING SCREEN ================= */
+  if (isLoading) {
+    return (
+      <div style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #667eea, #764ba2)",
+        color: "white",
+        fontSize: "1.5em"
+      }}>
+        Loading...
       </div>
-    </HashRouter>
+    );
+  }
+
+  /* ================= LOGIN ONLY WHEN STORAGE EMPTY ================= */
+  if (!isConnected) {
+    return <ConnectionLogin onConnect={handleConnect} />;
+  }
+
+  /* ================= MAIN APP ================= */
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<FactoryPage connectionConfig={connectionConfig} />}
+        />
+        <Route
+          path="/machine/:id"
+          element={<MachineDetailsPage connectionConfig={connectionConfig} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }

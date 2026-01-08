@@ -1,3 +1,4 @@
+//src/three/Ground.jsx
 export default function Ground() {
   return (
     <mesh

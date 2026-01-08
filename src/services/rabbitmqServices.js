@@ -18,11 +18,11 @@ class RabbitMQService {
 
     return new Promise((resolve, reject) => {
       const defaultOptions = {
-        host: options.host || 'localhost',
+        host: options.host || '192.168.150.139',
         port: options.port || 15675, // RabbitMQ MQTT WebSocket port (default: 15675)
         protocol: 'ws',
-        username: options.username || 'guest',
-        password: options.password || 'guest',
+        username: options.username || 'factory',
+        password: options.password || 'factory',
         clientId: `mqtt_client_${Math.random().toString(16).slice(2, 10)}`,
         clean: true,
         reconnectPeriod: 1000,
@@ -86,18 +86,18 @@ class RabbitMQService {
   }
 
   onError(error) {
-    console.error('❌ RabbitMQ Connection error:', error);
+    console.error(' RabbitMQ Connection error:', error);
     this.isConnected = false;
   }
 
   onClose() {
-    console.log('🔌 RabbitMQ Connection closed');
+    console.log(' RabbitMQ Connection closed');
     this.isConnected = false;
   }
 
   onReconnect() {
     this.reconnectAttempts++;
-    console.log(`🔄 Reconnecting... (Attempt ${this.reconnectAttempts})`);
+    console.log(` Reconnecting... (Attempt ${this.reconnectAttempts})`);
   }
 
   onMessage(topic, message) {
@@ -135,7 +135,7 @@ class RabbitMQService {
           if (err) {
             console.error(`Failed to subscribe to ${mqttTopic}:`, err);
           } else {
-            console.log(`📡 Subscribed to: ${mqttTopic}`);
+            console.log(` Subscribed to: ${mqttTopic}`);
           }
         });
       }
@@ -162,7 +162,7 @@ class RabbitMQService {
             if (err) {
               console.error(`Failed to unsubscribe from ${topic}:`, err);
             } else {
-              console.log(`📴 Unsubscribed from: ${topic}`);
+              console.log(` Unsubscribed from: ${topic}`);
             }
           });
         }
@@ -188,7 +188,7 @@ class RabbitMQService {
   disconnect() {
     if (this.client) {
       this.client.end(false, () => {
-        console.log('🔌 RabbitMQ Disconnected');
+        console.log(' RabbitMQ Disconnected');
       });
       this.client = null;
       this.subscribers.clear();

@@ -43,6 +43,7 @@ export default function Machine({ id, model, position, rotation, scale }) {
       position={position}
       rotation={rotation}
       scale={scale}
+      userData={{ collider: true }}
       onClick={(e) => {
         e.stopPropagation();
         navigate(`/machine/${id}`);

@@ -1,0 +1,137 @@
+/* ROOT */
+.factory-root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* 3D SCENE */
+.factory-3d-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* UI LAYER */
+.factory-ui-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.factory-ui-layer * {
+  pointer-events: auto;
+}
+
+/* SETTINGS BUTTON */
+.settings-fab {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background:#949495;
+  /* background: linear-gradient(135deg, #667eea, #764ba2); */
+  /* color: rgb(14, 14, 14); */
+  font-size: 1.5em;
+  cursor: pointer;
+  /* box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); */
+}
+
+/* OVERLAY */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* PANEL */
+.settings-panel {
+  width: 100%;
+  max-width: 420px;
+  background: #0f172a;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+/* HEADER */
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #020617;
+  color: white;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+/* CONTENT */
+.settings-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* FORM FIELD */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  color: #cbd5f5;
+  font-size: 0.85rem;
+}
+
+.form-field input {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #020617;
+  color: white;
+  font-size: 0.95rem;
+}
+
+/* READ ONLY LOOK */
+.form-field input[readonly] {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* LOGOUT BUTTON */
+.logout-btn {
+  margin-top: 8px;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+}

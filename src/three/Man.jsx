@@ -5,7 +5,7 @@ import * as THREE from "three";
 export default function Man({ model, position, rotation, scale }) {
   console.log(model, ":", position);
   const { scene } = useGLTF(model);
-   const clonedScene = scene.clone();
+  const clonedScene = scene.clone();
 
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(clonedScene);
@@ -14,9 +14,15 @@ export default function Man({ model, position, rotation, scale }) {
   }, [clonedScene]);
 
   return (
-    <group position={position} rotation={rotation} scale={scale}>
+    <group
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      userData={{ collider: true }}
+    >
       <primitive object={clonedScene} />
     </group>
+
 
   );
 }

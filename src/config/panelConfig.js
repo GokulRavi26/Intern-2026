@@ -1,3 +1,4 @@
+//src/config/panelConfig.js
 export const panelConfig = {
   position: [-250, 250, 0],     
   rotation: [0, 0, 0],      
